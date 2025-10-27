@@ -75,6 +75,9 @@
             <scope>test</scope>
         </dependency>
 
+<!--        saya menambahkan spring-boot-starter-security untuk mengaktifkan fitur keamanan bawaan Spring
+            dam jjwt-api, jjwt-impl, jjwt-jackson untuk membuat dan membaca token JWT.-->
+
     </dependencies>
 
     <build>

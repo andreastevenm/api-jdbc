@@ -16,16 +16,19 @@ import java.util.Collections;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
+//    saya membuat file ini untuk filter yang berjalan di setiap request.
+//    dimana dia fungsinya itu utnuk memastikan user yang akses endpointnya punya token yang valid.
+
     @Autowired
     private JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // 🚨 Skip filter untuk endpoint login (biar bisa login tanpa token)
+
+//        dibawah sini adalah unutk mengecek apakah request punya header authorization dan bearer
+//        dan kalau ada kita ambil token nya dan validasi.
         if (request.getServletPath().equals("/login")) {
             filterChain.doFilter(request, response);
             return;
@@ -36,10 +39,10 @@ public class JwtFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             String username = jwtUtil.validateToken(token);
+            //ini validasi nya
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
